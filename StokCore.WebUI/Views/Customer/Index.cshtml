@@ -1,9 +1,12 @@
 ﻿@model List<StokCore.EntityLayer.Concrete.Customer>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = ShareLocalizer.GetLocalizeHTML("Customers");
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@using StokCore.WebUI.Resources
+@inject LanguageService ShareLocalizer
 
 <h2>@ViewData["Title"]</h2>
 
@@ -11,12 +14,12 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>İsim</th>
-            <th>Soyisim</th>
-            <th>Telefon Numarası</th>
-            <th>E-Mail</th>
-            <th>Sil</th>
-            <th>Güncelle</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Name")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Surname")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Phone")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Email")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Delete")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Update")</th>
         </tr>
     </thead>
     <tbody>
@@ -28,11 +31,11 @@
                 <td>@item.Surname</td>
                 <td>@item.Phone</td>
                 <td>@item.Email</td>
-                <td><a href="/Customer/DeleteCustomer/@item.Id" class="btn btn-danger">Sil</a></td>
+                <td><a href="/Customer/DeleteCustomer/@item.Id" class="btn btn-danger">@ShareLocalizer.GetLocalizeHTML("Delete")</a></td>
                 <td>
                     <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#updateCustomerModal"
-                            onclick="fillUpdateModal(@item.Id, '@item.Name', '@item.Surname','@item.Phone','@item.Email')">
-                        Müşteri Güncelle
+                            onclick="fillUpdateModal(@item.Id, '@item.Name', '@item.Surname', '@item.Phone', '@item.Email')">
+                        @ShareLocalizer.GetLocalizeHTML("Update")
                     </button>
                 </td>
             </tr>
@@ -41,7 +44,7 @@
 </table>
 
 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
-    Müşteri Ekle
+    @ShareLocalizer.GetLocalizeHTML("AddCustomer")
 </button>
 
 <!-- Yeni Müşteri Ekle Modalı -->
@@ -50,30 +53,30 @@
         <div class="modal-content">
             <form asp-action="AddCustomer" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addCustomerModalLabel">Yeni Müşteri Ekle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    <h5 class="modal-title" id="addCustomerModalLabel">@ShareLocalizer.GetLocalizeHTML("AddCustomer")</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@ShareLocalizer.GetLocalizeHTML("Cancel")"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="Name" class="form-label">Adı</label>
+                        <label for="Name" class="form-label">@ShareLocalizer.GetLocalizeHTML("Name")</label>
                         <input id="Name" name="Name" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="Surname" class="form-label">Soyadı</label>
+                        <label for="Surname" class="form-label">@ShareLocalizer.GetLocalizeHTML("Surname")</label>
                         <input id="Surname" name="Surname" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="Email" class="form-label">E-Mail Adresi</label>
+                        <label for="Email" class="form-label">@ShareLocalizer.GetLocalizeHTML("Email")</label>
                         <input id="Email" name="Email" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="Phone" class="form-label">Telefon Numarası</label>
+                        <label for="Phone" class="form-label">@ShareLocalizer.GetLocalizeHTML("Phone")</label>
                         <input id="Phone" name="Phone" class="form-control" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@ShareLocalizer.GetLocalizeHTML("Cancel")</button>
+                    <button type="submit" class="btn btn-primary">@ShareLocalizer.GetLocalizeHTML("Save")</button>
                 </div>
             </form>
         </div>
@@ -86,32 +89,32 @@
         <div class="modal-content">
             <form asp-action="UpdateCustomer" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateCustomerModalLabel">Müşteri Güncelle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    <h5 class="modal-title" id="updateCustomerModalLabel">@ShareLocalizer.GetLocalizeHTML("UpdateCustomer")</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@ShareLocalizer.GetLocalizeHTML("Cancel")"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="UpdateCustomerId" name="Id" />
 
                     <div class="mb-3">
-                        <label for="UpdateCustomerName" class="form-label">Adı</label>
+                        <label for="UpdateCustomerName" class="form-label">@ShareLocalizer.GetLocalizeHTML("Name")</label>
                         <input id="UpdateCustomerName" name="Name" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="UpdateCustomerSurname" class="form-label">Soyadı</label>
+                        <label for="UpdateCustomerSurname" class="form-label">@ShareLocalizer.GetLocalizeHTML("Surname")</label>
                         <input id="UpdateCustomerSurname" name="Surname" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="UpdateCustomerEmail" class="form-label">E-Mail Adresi</label>
+                        <label for="UpdateCustomerEmail" class="form-label">@ShareLocalizer.GetLocalizeHTML("Email")</label>
                         <input id="UpdateCustomerEmail" name="Email" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="UpdateCustomerPhone" class="form-label">Telefon Numarası</label>
+                        <label for="UpdateCustomerPhone" class="form-label">@ShareLocalizer.GetLocalizeHTML("Phone")</label>
                         <input id="UpdateCustomerPhone" name="Phone" class="form-control" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@ShareLocalizer.GetLocalizeHTML("Cancel")</button>
+                    <button type="submit" class="btn btn-primary">@ShareLocalizer.GetLocalizeHTML("Update")</button>
                 </div>
             </form>
         </div>

@@ -1,21 +1,22 @@
 ﻿@model List<StokCore.EntityLayer.Concrete.Category>
+@using StokCore.EntityLayer.Concrete
+@using StokCore.WebUI.Resources
+@inject LanguageService ShareLocalizer
 
 @{
-    ViewData["Title"] = "Kategori Listesi";
+    ViewData["Title"] = ShareLocalizer.GetLocalizeHTML("CategoryList");
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewData["Title"]</h2>
-
-
 
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Kategori Adı </th>
-            <th>Sil</th>
-            <th>Güncelle</th>
-            
+            <th>@ShareLocalizer.GetLocalizeHTML("CategoryNameTR")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Delete")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("UpdateCategory")</th>
         </tr>
     </thead>
     <tbody>
@@ -23,84 +24,92 @@
         {
             <tr>
                 <td>@item.Id</td>
-                <td>@item.CategoryName</td>
-                <td><a href="/Category/DeleteCategory/@item.Id" class="btn btn-danger">Sil</a></td>
+                <td>
+                    @{
+                        // Dil seçimine göre kategori adını göster
+                        var currentLang = System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
+                        var displayName = currentLang == "en" ? item.CategoryName_En : item.CategoryName;
+                    }
+                    @displayName
+                </td>
+                <td>
+                    <a href="/Category/DeleteCategory/@item.Id" class="btn btn-danger">
+                        @ShareLocalizer.GetLocalizeHTML("Delete")
+                    </a>
+                </td>
                 <td>
                     <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#updateCategoryModal"
                             onclick="fillUpdateModal(@item.Id, '@item.CategoryName', '@item.CategoryName_En')">
-                        Kategori Güncelle
+                        @ShareLocalizer.GetLocalizeHTML("UpdateCategory")
                     </button>
                 </td>
-
             </tr>
         }
     </tbody>
 </table>
 
-
 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-    Kategori Ekle
+    @ShareLocalizer.GetLocalizeHTML("AddCategory")
 </button>
 
-
-@* //modal ekleme *@
+<!-- Kategori Ekle Modalı -->
 <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form asp-action="AddCategory" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addCategoryModalLabel">Yeni Kategori Ekle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    <h5 class="modal-title" id="addCategoryModalLabel">@ShareLocalizer.GetLocalizeHTML("NewCategory")</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@ShareLocalizer.GetLocalizeHTML("Cancel")"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="CategoryName" class="form-label">Kategori Adı (TR)</label>
+                        <label for="CategoryName" class="form-label">@ShareLocalizer.GetLocalizeHTML("CategoryNameTR")</label>
                         <input id="CategoryName" name="CategoryName" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="CategoryName_En" class="form-label">Kategori Adı (EN)</label>
+                        <label for="CategoryName_En" class="form-label">@ShareLocalizer.GetLocalizeHTML("CategoryNameEN")</label>
                         <input id="CategoryName_En" name="CategoryName_En" class="form-control" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@ShareLocalizer.GetLocalizeHTML("Cancel")</button>
+                    <button type="submit" class="btn btn-primary">@ShareLocalizer.GetLocalizeHTML("Save")</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-
-@* //güncelleme Modalı *@
+<!-- Kategori Güncelle Modalı -->
 <div class="modal fade" id="updateCategoryModal" tabindex="-1" aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form asp-action="UpdateCategory" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateCategoryModalLabel">Kategori Güncelle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    <h5 class="modal-title" id="updateCategoryModalLabel">@ShareLocalizer.GetLocalizeHTML("UpdateCategory")</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@ShareLocalizer.GetLocalizeHTML("Cancel")"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="UpdateCategoryId" name="Id" />
 
                     <div class="mb-3">
-                        <label for="UpdateCategoryName" class="form-label">Kategori Adı (TR)</label>
+                        <label for="UpdateCategoryName" class="form-label">@ShareLocalizer.GetLocalizeHTML("CategoryNameTR")</label>
                         <input id="UpdateCategoryName" name="CategoryName" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="UpdateCategoryName_En" class="form-label">Kategori Adı (EN)</label>
+                        <label for="UpdateCategoryName_En" class="form-label">@ShareLocalizer.GetLocalizeHTML("CategoryNameEN")</label>
                         <input id="UpdateCategoryName_En" name="CategoryName_En" class="form-control" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@ShareLocalizer.GetLocalizeHTML("Cancel")</button>
+                    <button type="submit" class="btn btn-primary">@ShareLocalizer.GetLocalizeHTML("Update")</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script>
     function fillUpdateModal(id, name, nameEn) {
         document.getElementById('UpdateCategoryId').value = id;

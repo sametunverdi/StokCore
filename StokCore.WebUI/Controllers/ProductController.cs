@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StokCore.BusinessLayer.Concrete;
 using StokCore.DataAccessLayer.EntityFramework;
 using StokCore.EntityLayer.Concrete;
 
 namespace StokCore.WebUI.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         ProductManager productManager = new ProductManager(new EfProductDal());

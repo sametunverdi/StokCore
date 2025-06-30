@@ -1,7 +1,10 @@
 ﻿@model List<StokCore.EntityLayer.Concrete.Product>
 @using StokCore.EntityLayer.Concrete
+@using StokCore.WebUI.Resources
+@inject LanguageService ShareLocalizer
+
 @{
-    ViewData["Title"] = "Ürün Listesi";
+    ViewData["Title"] = ShareLocalizer.GetLocalizeHTML("ProductList");
     Layout = "~/Views/Shared/_Layout.cshtml";
     var categories = ViewBag.Categories as List<Category>;
 }
@@ -12,13 +15,13 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Adı</th>
-            <th>Marka</th>
-            <th>Fiyat</th>
-            <th>Stok</th>
-            <th>Kategori</th>
-            <th>Sil</th>
-            <th>Güncelle</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Name")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Brand")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Price")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Stock")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Category")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Delete")</th>
+            <th>@ShareLocalizer.GetLocalizeHTML("Update")</th>
         </tr>
     </thead>
     <tbody>
@@ -31,11 +34,11 @@
                 <td>@item.Price</td>
                 <td>@item.Stock</td>
                 <td>@item.Category?.CategoryName</td>
-                <td><a href="/Product/DeleteProduct/@item.Id" class="btn btn-danger">Sil</a></td>
+                <td><a href="/Product/DeleteProduct/@item.Id" class="btn btn-danger">@ShareLocalizer.GetLocalizeHTML("Delete")</a></td>
                 <td>
                     <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#updateProductModal"
                             onclick="fillUpdateProductModal(@item.Id, '@item.Name', '@item.Brand', @item.Price, @item.Stock, @item.CategoryId)">
-                        Ürün Güncelle
+                        @ShareLocalizer.GetLocalizeHTML("UpdateProduct")
                     </button>
                 </td>
             </tr>
@@ -44,7 +47,7 @@
 </table>
 
 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
-    Ürün Ekle
+    @ShareLocalizer.GetLocalizeHTML("AddProduct")
 </button>
 
 <!-- Ürün Ekle Modalı -->
@@ -53,40 +56,39 @@
         <div class="modal-content">
             <form asp-action="AddProduct" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addProductModalLabel">Yeni Ürün Ekle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    <h5 class="modal-title" id="addProductModalLabel">@ShareLocalizer.GetLocalizeHTML("NewProduct")</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@ShareLocalizer.GetLocalizeHTML("Cancel")"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="Name" class="form-label">Adı</label>
+                        <label for="Name" class="form-label">@ShareLocalizer.GetLocalizeHTML("Name")</label>
                         <input id="Name" name="Name" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="Brand" class="form-label">Marka</label>
+                        <label for="Brand" class="form-label">@ShareLocalizer.GetLocalizeHTML("Brand")</label>
                         <input id="Brand" name="Brand" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="Price" class="form-label">Fiyat</label>
+                        <label for="Price" class="form-label">@ShareLocalizer.GetLocalizeHTML("Price")</label>
                         <input id="Price" name="Price" type="number" step="0.01" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="Stock" class="form-label">Stok</label>
+                        <label for="Stock" class="form-label">@ShareLocalizer.GetLocalizeHTML("Stock")</label>
                         <input id="Stock" name="Stock" type="number" class="form-control" />
                     </div>
                     <div class="mb-3">
                         <select name="CategoryId" class="form-control mb-2" required>
-                            <option value="">Kategori Seç</option>
-                            @foreach (var category in (List<StokCore.EntityLayer.Concrete.Category>)ViewBag.Categories)
+                            <option value="">@ShareLocalizer.GetLocalizeHTML("SelectCategory")</option>
+                            @foreach (var category in (List<Category>)ViewBag.Categories)
                             {
                                 <option value="@category.Id">@category.CategoryName</option>
                             }
                         </select>
-
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@ShareLocalizer.GetLocalizeHTML("Cancel")</button>
+                    <button type="submit" class="btn btn-primary">@ShareLocalizer.GetLocalizeHTML("Save")</button>
                 </div>
             </form>
         </div>
@@ -99,42 +101,41 @@
         <div class="modal-content">
             <form asp-action="UpdateProduct" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateProductModalLabel">Ürün Güncelle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                    <h5 class="modal-title" id="updateProductModalLabel">@ShareLocalizer.GetLocalizeHTML("UpdateProduct")</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@ShareLocalizer.GetLocalizeHTML("Cancel")"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="UpdateProductId" name="Id" />
 
                     <div class="mb-3">
-                        <label for="UpdateProductName" class="form-label">Adı</label>
+                        <label for="UpdateProductName" class="form-label">@ShareLocalizer.GetLocalizeHTML("Name")</label>
                         <input id="UpdateProductName" name="Name" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="UpdateProductBrand" class="form-label">Marka</label>
+                        <label for="UpdateProductBrand" class="form-label">@ShareLocalizer.GetLocalizeHTML("Brand")</label>
                         <input id="UpdateProductBrand" name="Brand" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="UpdateProductPrice" class="form-label">Fiyat</label>
+                        <label for="UpdateProductPrice" class="form-label">@ShareLocalizer.GetLocalizeHTML("Price")</label>
                         <input id="UpdateProductPrice" name="Price" type="number" step="0.01" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <label for="UpdateProductStock" class="form-label">Stok</label>
+                        <label for="UpdateProductStock" class="form-label">@ShareLocalizer.GetLocalizeHTML("Stock")</label>
                         <input id="UpdateProductStock" name="Stock" type="number" class="form-control" />
                     </div>
                     <div class="mb-3">
                         <select id="UpdateProductCategoryId" name="CategoryId" class="form-control mb-2" required>
-                            <option value="">Kategori Seç</option>
-                            @foreach (var category in (List<StokCore.EntityLayer.Concrete.Category>)ViewBag.Categories)
+                            <option value="">@ShareLocalizer.GetLocalizeHTML("SelectCategory")</option>
+                            @foreach (var category in (List<Category>)ViewBag.Categories)
                             {
                                 <option value="@category.Id">@category.CategoryName</option>
                             }
                         </select>
-
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@ShareLocalizer.GetLocalizeHTML("Cancel")</button>
+                    <button type="submit" class="btn btn-primary">@ShareLocalizer.GetLocalizeHTML("Update")</button>
                 </div>
             </form>
         </div>
@@ -149,6 +150,5 @@
         document.getElementById('UpdateProductPrice').value = price;
         document.getElementById('UpdateProductStock').value = stock;
         document.getElementById('UpdateProductCategoryId').value = categoryId;
-
     }
 </script>

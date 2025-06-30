@@ -12,7 +12,7 @@ namespace StokCore.DataAccessLayer
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=LAPTOP-EELQ0C13\\SQLEXPRESS; database=StokCoreDb; integrated security=true; TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("server=DESKTOP-8JMCHUH\\SQLEXPRESS; database=StokCoreDb; integrated security=true; TrustServerCertificate=True;");
                          
            
         }
